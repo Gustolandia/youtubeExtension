@@ -1,23 +1,53 @@
-import {getActiveTabURL} from "/util.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+const onDelete = e => {
+    let id=e.target.getAttribute("key");
+    
+    if (id==undefined){
+        id="";
+    }
+    let timestamp=e.target.getAttribute("timestamp");
+    let currentVideoBookmarks=[];
+    chrome.storage.sync.get([id], (data) => {
+        currentVideoBookmarks = data [id] ? JSON.parse(data[id]) : [];
+
+        currentVideoBookmarks = currentVideoBookmarks.filter((b)=>b.time!=timestamp);
+
+        chrome.storage.sync.set({[id]: JSON.stringify(currentVideoBookmarks)});
+
+        console.log(currentVideoBookmarks);
+    if(Object.keys(currentVideoBookmarks).length==0){
+        chrome.storage.sync.remove([id]);
+    }
+
+
+    } )
+
+    window.location.reload();
+}
+
+document.addEventListener("DOMContentLoaded",  () => {
     const imageArea = document.getElementsByClassName("image-area")[0];
-    chrome.storage.sync.get(null, async (data) => {
+    const allImages = document.getElementsByTagName('img');
+    chrome.storage.sync.get(null, (data) => {
         let thtml=`<table id="tableOfContents"><tbody>`;
         
         for (const [key, value] of Object.entries(data)) {
             let processedData=JSON.parse(value);
             let nRows=Object.keys(processedData).length
             thtml+=`<tr><td rowspan="`+(nRows+1)+`"><a href="https://www.youtube.com/watch?v=`+key+`">https://www.youtube.com/watch?v=`+key+`</a></td></tr>`;
-            for (const [key, value] of Object.entries(processedData)) {
-                thtml+=`<tr><td>`+value.desc+`</td><td></td></tr>`;
-                console.log(value.desc);
+            for (const [key2, value2] of Object.entries(processedData)) {
+                thtml+=`<tr><td>`+value2.desc+`</td><td class="bookmark" key="`+key+`" timestamp="`+value2.time+`" id="bookmark-`+key+`-`+value2.time+`"><img key="`+key+`" timestamp="`+value2.time+`" src = "assets/delete.png"/></td></tr>`;
+                console.log(key,value2.time);
             }
             
-            console.log(key, JSON.parse(value));
           }
           thtml+=`</tbody></table>`;
-          console.log(thtml);
           imageArea.innerHTML+=thtml;
+          for(let i = 0; i < allImages.length ; i++) {
+            
+            allImages[i].addEventListener("click",onDelete);
+          }
+          
           });
+        
 });
