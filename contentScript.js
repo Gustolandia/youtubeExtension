@@ -12,7 +12,6 @@
         if (type ==="NEW"){
             currentVideo = videoID;
             newVideoLoaded();
-            console.log("Loaded the full function");
         } else if (type === "PLAY"){
             ytPlayer.currentTime = value;
         } else if (type === "DELETE"){
@@ -60,7 +59,7 @@
             myModal.id="myModal1";
             myModal.innerHTML=`<div class="modal1-content">
             <span class="close1" id="close1">&times;</span>
-            <input name="bookmarkDesc" id="bookmarkDesc" autocomplete="on" placeholder="Please insert the bookmark description"><button id="myBtn1">Add Bookmark</button>
+            <input name="bookmarkDesc" id="bookmarkDesc" autocomplete="on" value="" placeholder="Please insert the bookmark description"><button id="myBtn1">Add Bookmark</button>
             </div>`;
 
             document.getElementsByTagName("body")[0].appendChild(myModal);
@@ -72,7 +71,16 @@
                 if (event.target == myModal) {
                     myModal.style.display = "none";
                 }
-              }
+            }
+            document.getElementById("bookmarkDesc").addEventListener("keypress", function(event) {
+                // If the user presses the "Enter" key on the keyboard
+                if (event.key === "Enter") {
+                  // Cancel the default action, if needed
+                  event.preventDefault();
+                  // Trigger the button element with a click
+                  document.getElementById("myBtn1").click();
+                }
+            });
 
             
         }
@@ -80,6 +88,10 @@
     
     const openModal = () => {
         document.getElementById("myModal1").style.display = "block";
+        document.getElementById("bookmarkDesc").focus();
+        document.getElementById("bookmarkDesc").select();
+
+
     }
     const closeModal = () => {
         document.getElementById("myModal1").style.display = "none";
@@ -87,7 +99,6 @@
 
     const addNewBookmarkEventHandler = async () => {
         let bookmarkDesc = document.getElementById("bookmarkDesc").value;
-        console.log(bookmarkDesc);
         const currentTime = ytPlayer.currentTime;
         const newBookmark= {
             time:currentTime,

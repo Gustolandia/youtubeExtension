@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         
     }else{
             const container= document.getElementsByClassName("container")[0];
-            container.innerHTML= '<div class="title"> This is not a youtube page. </div>';
+            container.innerHTML= '<div class="title"> This is not a youtube video page. </div>';
     }
 
     const optionsElement = document.getElementById("options").children[0];

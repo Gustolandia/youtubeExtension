@@ -4,8 +4,11 @@ body{
     color: white;
 }
 td{
-    border: 1 black full;
+    padding: 40px;
+    border: 1px solid white;
 }
+
+
 
 img{
     width: 30px;
