@@ -1,9 +1,16 @@
+html{
+  height:min-content;
+}
+
+body{
+  height:min-content;
+}
 .container {
     width: 280px;
     color: #314d3e;
   }
 
-  #options{
+  .options{
     padding: 8px;
     margin-top: auto;
   }
