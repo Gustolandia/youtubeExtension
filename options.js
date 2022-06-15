@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded",  () => {
         for (const [key, value] of Object.entries(data)) {
             let processedData=JSON.parse(value);
             let nRows=Object.keys(processedData).length
-            thtml+=`<tr><td rowspan="`+(nRows+1)+`"><a href="https://www.youtube.com/watch?v=`+key+`">https://www.youtube.com/watch?v=`+key+`</a></td></tr>`;
+            thtml+=`<tr><td rowspan="`+(nRows+1)+`"><iframe width="448" height="252" src="https://www.youtube.com/embed/`+key+`" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></td></tr>`;
             for (const [key2, value2] of Object.entries(processedData)) {
                 thtml+=`<tr><td>`+value2.desc+`</td><td class="bookmark" key="`+key+`" timestamp="`+value2.time+`" id="bookmark-`+key+`-`+value2.time+`"><img key="`+key+`" timestamp="`+value2.time+`" src = "assets/delete.png"/></td></tr>`;
                 console.log(key,value2.time);

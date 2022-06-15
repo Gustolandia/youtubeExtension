@@ -1,4 +1,6 @@
+
 (()=>{
+    
     let ytLeftControls, ytPlayer;
     let currentVideo= "";
 
@@ -51,19 +53,49 @@
 
             ytLeftControls.appendChild(bookmarkBtn);
 
-            bookmarkBtn.addEventListener("click", addNewBookmarkEventHandler);
+            bookmarkBtn.addEventListener("click", openModal);
+
+            const myModal=document.createElement("div");
+            myModal.className="modal1";
+            myModal.id="myModal1";
+            myModal.innerHTML=`<div class="modal1-content">
+            <span class="close1" id="close1">&times;</span>
+            <input name="bookmarkDesc" id="bookmarkDesc" autocomplete="on" placeholder="Please insert the bookmark description"><button id="myBtn1">Add Bookmark</button>
+            </div>`;
+
+            document.getElementsByTagName("body")[0].appendChild(myModal);
+            document.getElementById("myBtn1").addEventListener("click", addNewBookmarkEventHandler );
+            document.getElementById("close1").addEventListener("click", closeModal);
+
+
+            window.onclick = function(event) {
+                if (event.target == myModal) {
+                    myModal.style.display = "none";
+                }
+              }
+
+            
         }
     }
     
+    const openModal = () => {
+        document.getElementById("myModal1").style.display = "block";
+    }
+    const closeModal = () => {
+        document.getElementById("myModal1").style.display = "none";
+    }
+
     const addNewBookmarkEventHandler = async () => {
+        let bookmarkDesc = document.getElementById("bookmarkDesc").value;
+        console.log(bookmarkDesc);
         const currentTime = ytPlayer.currentTime;
         const newBookmark= {
             time:currentTime,
-            desc:"Bookmark at "+ getTime(currentTime),
+            desc:bookmarkDesc+" (Time: "+ getTime(currentTime)+")",
         };
         
         currentVideoBookmarks = await fetchBookmarks();
-
+        document.getElementById("myModal1").style.display = "none";
         chrome.storage.sync.set({
             [currentVideo]: JSON.stringify([...currentVideoBookmarks, newBookmark].sort((a,b) => a.time -b.time))
         });
